@@ -94,7 +94,7 @@ const aiEngines = [
 const stepCards = [
   {
     icon: <SearchIcon />,
-    title: "Enter a Real Query",
+    title: "Enter a Query",
     text: "Type a search query the way a customer would. Example: 'best magnesium supplement for seniors'.",
   },
   {
@@ -540,7 +540,7 @@ function HowItWorksSection() {
             className="font-regular"
             style={{ color: "rgb(217,217,217)", fontSize: "clamp(14px, 2vw, 18px)", lineHeight: "1.5em" }}
           >
-            Enter a real query and we analyze how AI systems respond — showing mentions, rankings, and gaps.
+            Enter a query and we analyze how AI systems respond — showing mentions, rankings, and gaps.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[20px]">

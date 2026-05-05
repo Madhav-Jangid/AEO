@@ -3,11 +3,8 @@ export interface ModelConfig {
   name: string;
   tagline: string;
   provider: "groq" | "gemini" | "openai" | "anthropic";
-  /** Underlying model identifier passed to the API */
   model: string;
-  /** RGB color string for UI badges */
   color: string;
-  /** Whether this model is toggled on by default */
   defaultEnabled: boolean;
 }
 
@@ -63,7 +60,6 @@ export function getModelById(id: string): ModelConfig | undefined {
   return AVAILABLE_MODELS.find((m) => m.id === id);
 }
 
-/** Returns display name + color for any engine id, with fallback for legacy IDs */
 export function getEngineMeta(id: string): { name: string; color: string } {
   const cfg = AVAILABLE_MODELS.find((m) => m.id === id);
   if (cfg) return { name: cfg.name, color: cfg.color };

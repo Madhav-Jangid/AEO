@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 /* ─────────────────────────────────────────
-   ICONS
+  ICONS
 ───────────────────────────────────────── */
 const ArrowLeftIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -37,7 +37,7 @@ const CalendarIcon = () => (
 );
 
 /* ─────────────────────────────────────────
-   BUTTON COMPONENTS
+  BUTTON COMPONENTS
 ───────────────────────────────────────── */
 function SecondaryButton({
   children,
@@ -67,7 +67,7 @@ function SecondaryButton({
 }
 
 /* ─────────────────────────────────────────
-   REPORT HEADER
+  REPORT HEADER
 ───────────────────────────────────────── */
 function ReportHeader({
   reportData
@@ -197,7 +197,7 @@ function ReportHeader({
 }
 
 /* ─────────────────────────────────────────
-   AI RESPONSES PANEL (REPORT VERSION)
+  AI RESPONSES PANEL (REPORT VERSION)
 ───────────────────────────────────────── */
 function ReportAIResponsesPanel() {
   const [activeTab, setActiveTab] = useState("gpt");
@@ -207,11 +207,11 @@ function ReportAIResponsesPanel() {
       name: "GPT-4o",
       response: `Based on your query about magnesium supplements for seniors, here are my top recommendations:
 
-1. **NutriPeak Magnesium Glycinate** - Highly bioavailable form, gentle on stomach
-2. **VitaCore Magnesium Complex** - Contains multiple forms for better absorption
-3. **PureBrand Magnesium Citrate** - Good for constipation relief in seniors
+  1. **NutriPeak Magnesium Glycinate** - Highly bioavailable form, gentle on stomach
+  2. **VitaCore Magnesium Complex** - Contains multiple forms for better absorption
+  3. **PureBrand Magnesium Citrate** - Good for constipation relief in seniors
 
-Each of these products is specifically formulated for older adults with appropriate dosing and minimal side effects.`,
+  Each of these products is specifically formulated for older adults with appropriate dosing and minimal side effects.`,
       mentions: ["NutriPeak"],
       confidence: "High",
     },
@@ -219,11 +219,11 @@ Each of these products is specifically formulated for older adults with appropri
       name: "Claude 3.5",
       response: `For seniors looking for magnesium supplements, I'd recommend:
 
-• **VitaCore Magnesium Complex** - Comprehensive formula with vitamin D3
-• **HealthFirst Senior Magnesium** - Lower dose, easier to absorb
-• **NutriPeak Magnesium Glycinate** - Gentle formulation for sensitive stomachs
+  • **VitaCore Magnesium Complex** - Comprehensive formula with vitamin D3
+  • **HealthFirst Senior Magnesium** - Lower dose, easier to absorb
+  • **NutriPeak Magnesium Glycinate** - Gentle formulation for sensitive stomachs
 
-These brands consistently rate well for quality and senior-specific formulations.`,
+  These brands consistently rate well for quality and senior-specific formulations.`,
       mentions: ["VitaCore", "HealthFirst", "NutriPeak"],
       confidence: "High",
     },
@@ -231,11 +231,11 @@ These brands consistently rate well for quality and senior-specific formulations
       name: "Gemini 1.5",
       response: `The best magnesium supplements for seniors typically include:
 
-1. **VitaCore Magnesium Complex** - Multi-form blend with co-factors
-2. **PureBrand Magnesium Citrate** - High absorption rate
-3. **AlphaVit Senior Formula** - Specifically designed for adults 65+
+  1. **VitaCore Magnesium Complex** - Multi-form blend with co-factors
+  2. **PureBrand Magnesium Citrate** - High absorption rate
+  3. **AlphaVit Senior Formula** - Specifically designed for adults 65+
 
-Look for products that third-party test for purity and provide clear dosing instructions.`,
+  Look for products that third-party test for purity and provide clear dosing instructions.`,
       mentions: ["VitaCore", "PureBrand", "AlphaVit"],
       confidence: "Medium",
     },
@@ -259,8 +259,8 @@ Look for products that third-party test for purity and provide clear dosing inst
             key={key}
             onClick={() => setActiveTab(key)}
             className={`px-4 py-2 font-medium transition-all border-b-2 ${activeTab === key
-                ? "text-purple-400 border-purple-400"
-                : "text-gray-400 border-transparent hover:text-gray-300"
+              ? "text-purple-400 border-purple-400"
+              : "text-gray-400 border-transparent hover:text-gray-300"
               }`}
             style={{
               color: activeTab === key ? "rgb(145,75,241)" : "rgb(156,163,175)",
@@ -321,7 +321,7 @@ Look for products that third-party test for purity and provide clear dosing inst
 }
 
 /* ─────────────────────────────────────────
-   DETAILED ANALYSIS
+  DETAILED ANALYSIS
 ───────────────────────────────────────── */
 function DetailedAnalysis() {
   const analysisData = [
@@ -406,7 +406,7 @@ function DetailedAnalysis() {
 }
 
 /* ─────────────────────────────────────────
-   COMPETITOR ANALYSIS
+  COMPETITOR ANALYSIS
 ───────────────────────────────────────── */
 function CompetitorAnalysis() {
   const competitors = [
@@ -557,7 +557,7 @@ function CompetitorAnalysis() {
 }
 
 /* ─────────────────────────────────────────
-   ACTIONABLE INSIGHTS
+  ACTIONABLE INSIGHTS
 ───────────────────────────────────────── */
 function ActionableInsights() {
   const insights = [
@@ -722,7 +722,7 @@ function ActionableInsights() {
 }
 
 /* ─────────────────────────────────────────
-   MOCK DATA
+  MOCK DATA
 ───────────────────────────────────────── */
 const mockReportData = {
   "magnesium-seniors": {
@@ -744,7 +744,7 @@ const mockReportData = {
 };
 
 /* ─────────────────────────────────────────
-   MAIN REPORT PAGE
+  MAIN REPORT PAGE
 ───────────────────────────────────────── */
 export default function ReportDetailPage() {
   const params = useParams();

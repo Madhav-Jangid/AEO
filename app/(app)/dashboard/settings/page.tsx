@@ -4,25 +4,27 @@ import { SettingsClient } from "./SettingsClient";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
-  const { data: userData } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
 
-  if (!userData?.user) {
-    redirect("/login");
-  }
+  if (!data?.user) redirect("/login");
 
-  const user = userData.user;
+  const user = data.user;
   const meta = user.user_metadata ?? {};
 
-  const name = meta.full_name || meta.name || user.email?.split("@")[0] || "";
-  const brandName = meta.brand_name ?? "";
-  const brandUrl = meta.brand_url ?? "";
+  const name =
+    meta.full_name ||
+    meta.name ||
+    user.email?.split("@")[0] ||
+    "";
 
   return (
-    <SettingsClient
-      initialName={name}
-      initialEmail={user.email ?? ""}
-      initialBrandName={brandName}
-      initialBrandUrl={brandUrl}
-    />
+    <div className="max-w-3xl mx-auto w-full">
+      <SettingsClient
+        initialName={name}
+        initialEmail={user.email ?? ""}
+        initialBrandName={meta.brand_name ?? ""}
+        initialBrandUrl={meta.brand_url ?? ""}
+      />
+    </div>
   );
 }

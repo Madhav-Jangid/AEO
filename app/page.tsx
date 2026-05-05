@@ -334,8 +334,8 @@ function NavBar() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getSession().then(({ data }) => {
-      setAuthed(!!data.session);
+    supabase.auth.getUser().then(({ data }) => {
+      setAuthed(!!data.user);
     });
   }, []);
 
@@ -423,19 +423,19 @@ function NavBar() {
             const label = isAuthLink && authed ? "Dashboard" : l.label;
             const href = isAuthLink && authed ? "/dashboard" : l.href;
             return (
-            <Link
-              key={l.label}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="text-base font-regular transition-all hover:opacity-70 py-3"
-              style={{
-                color: "rgb(217,217,217)",
-                fontFamily: "var(--font-outfit)",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-              }}
-            >
-              {label}
-            </Link>
+              <Link
+                key={l.label}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="text-base font-regular transition-all hover:opacity-70 py-3"
+                style={{
+                  color: "rgb(217,217,217)",
+                  fontFamily: "var(--font-outfit)",
+                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                }}
+              >
+                {label}
+              </Link>
             );
           })}
         </div>

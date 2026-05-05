@@ -1,6 +1,5 @@
-import { FREE_LIMITS } from "@/lib/config/limits";
 import { createClient } from "@/lib/supabase/server";
-import type { AnalysisResult, ProductDetailPayload, ProductPreview, StorePlatform } from "@/lib/types";
+import type { AnalysisResult, EngineAnalysis, ProductDetailPayload, ProductPreview, ScoreData, StorePlatform } from "@/lib/types";
 
 interface ProductQueryRow {
   id: string;
@@ -21,27 +20,19 @@ export async function getSessionUser() {
 
 export async function ensureAppUser() {
   const supabase = await createClient();
-  // Prefer getUser() (server-validated) so RLS auth.uid() resolves correctly.
-  // Fall back to getSession() only if the auth server is unreachable.
   const { data: userData, error: userError } = await supabase.auth.getUser();
-  let authUser = userData?.user ?? null;
-  if (!authUser || userError) {
-    const { data: sessionData } = await supabase.auth.getSession();
-    authUser = sessionData.session?.user ?? null;
-  }
-  if (!authUser) return null;
+  if (userError || !userData?.user) return null;
+
+  const authUser = userData.user;
 
   const { data: existing } = await supabase.from("users").select("*").eq("id", authUser.id).maybeSingle();
   if (existing) return existing;
 
-  const payload = {
-    id: authUser.id,
-    email: authUser.email ?? "",
-    plan: "free",
-    onboarding_complete: false,
-  };
-
-  const { data } = await supabase.from("users").insert(payload).select("*").single();
+  const { data } = await supabase
+    .from("users")
+    .insert({ id: authUser.id, email: authUser.email ?? "", plan: "free", onboarding_complete: false })
+    .select("*")
+    .single();
   return data;
 }
 
@@ -123,28 +114,27 @@ export async function getProductDetail(userId: string, productId: string): Promi
     .eq("date", new Date().toISOString().slice(0, 10))
     .maybeSingle();
 
-  const latest = analyses?.[0];
-
   return {
     product: {
       id: productRow.id,
       name: productRow.name,
       image: productRow.image,
       metadata: productRow.metadata || {},
-      // created_at: productRow.created_at,
     },
-    // platform: productRow.stores.platform,
-    // lastAnalyzed: latest?.created_at ?? null,
-    latestAnalysis: (latest?.results_json as AnalysisResult) ?? null,
+    latestAnalysis: (analyses?.[0]?.results_json as AnalysisResult) ?? null,
     analysesToday: usage?.daily_analysis_count ?? 0,
-    // freeLimitReached: (usage?.daily_analysis_count ?? 0) >= FREE_LIMITS.analysesPerDay,
   };
 }
 
 export async function incrementDailyUsage(userId: string) {
   const supabase = await createClient();
   const date = new Date().toISOString().slice(0, 10);
-  const { data: existing } = await supabase.from("usage_tracking").select("*").eq("user_id", userId).eq("date", date).maybeSingle();
+  const { data: existing } = await supabase
+    .from("usage_tracking")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("date", date)
+    .maybeSingle();
 
   if (!existing) {
     await supabase.from("usage_tracking").insert({ user_id: userId, date, daily_analysis_count: 1 });
@@ -154,4 +144,34 @@ export async function incrementDailyUsage(userId: string) {
   const next = existing.daily_analysis_count + 1;
   await supabase.from("usage_tracking").update({ daily_analysis_count: next }).eq("user_id", userId).eq("date", date);
   return next;
+}
+
+export async function saveScan(
+  userId: string,
+  query: string,
+  brandName: string,
+  engines: EngineAnalysis[],
+  scoreData: ScoreData
+): Promise<string | null> {
+  const supabase = await createClient();
+  const [e0, e1, e2] = engines;
+  const { data, error } = await supabase
+    .from("scans")
+    .insert({
+      user_id: userId,
+      query,
+      brand_name: brandName,
+      gpt_response: engines.find((e) => e.engine === "gpt")?.response ?? e0?.response ?? null,
+      claude_response: engines.find((e) => e.engine === "claude")?.response ?? e1?.response ?? null,
+      gemini_response: engines.find((e) => e.engine === "gemini")?.response ?? e2?.response ?? null,
+      score_data: scoreData,
+    })
+    .select("id")
+    .single();
+
+  if (error) {
+    console.error("Failed to save scan:", error);
+    return null;
+  }
+  return data?.id ?? null;
 }

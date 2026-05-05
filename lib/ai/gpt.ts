@@ -1,42 +1,26 @@
-import type { AIProvider, ProviderInput, ProviderOutput } from "@/lib/ai/provider";
+export async function callGpt(query: string, model: string): Promise<string> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error("OPENAI_API_KEY is missing");
 
-export const gptProvider: AIProvider = {
-  name: "gpt",
-  async run(input: ProviderInput): Promise<ProviderOutput> {
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      throw new Error("Missing OPENAI_API_KEY");
-    }
+  const prompt = `A shopper is asking: "${query}". As an AI shopping assistant, what are your top recommendations? Be specific with product and brand names. List 5-7 recommended products or brands, numbered, with a brief explanation for each.`;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-        temperature: 0.2,
-        messages: [
-          { role: "system", content: "You are a concise shopping recommendation engine." },
-          {
-            role: "user",
-            content: `User query: ${input.query}. Product: ${input.productName}. Description: ${input.productDescription}. Return one short recommendation with alternatives.`,
-          },
-        ],
-      }),
-    });
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model,
+      temperature: 0.3,
+      max_tokens: 700,
+      messages: [
+        { role: "system", content: "You are a helpful AI shopping assistant. Always respond with a numbered list." },
+        { role: "user", content: prompt },
+      ],
+    }),
+  });
 
-    if (!response.ok) {
-      throw new Error(`OpenAI failed ${response.status}`);
-    }
-
-    const data = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    const text = data.choices?.[0]?.message?.content?.trim();
-    if (!text) {
-      throw new Error("OpenAI empty response");
-    }
-
-    return { text, usedFallback: false };
-  },
-};
+  if (!res.ok) throw new Error(`OpenAI ${res.status}: ${await res.text()}`);
+  const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const text = data.choices?.[0]?.message?.content?.trim();
+  if (!text) throw new Error("GPT returned empty response");
+  return text;
+}

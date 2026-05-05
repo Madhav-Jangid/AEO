@@ -1,22 +1,22 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { AVAILABLE_MODELS, getEngineMeta } from "@/lib/config/models";
 import type { EngineAnalysis, ScoreData } from "@/lib/types";
 
-/* ─── Platform message templates ─── */
+/* â”€â”€â”€ Platform message templates â”€â”€â”€ */
 const TEMPLATES = [
-  (q: string, n: number) => `Scanning "${q}" across ${n} AI engine${n !== 1 ? "s" : ""} to check your brand's visibility…`,
-  (q: string) => `Querying multiple AI systems with your customer's exact search. Looking for your brand among the recommendations for "${q}"…`,
-  (_q: string) => `Analyzing how leading AI shopping assistants respond to your customer's query in real time…`,
+  (q: string, n: number) => `Scanning "${q}" across ${n} AI engine${n !== 1 ? "s" : ""} to check your brand's visibilityâ€¦`,
+  (q: string) => `Querying multiple AI systems with your customer's exact search. Looking for your brand among the recommendations for "${q}"â€¦`,
+  (_q: string) => `Analyzing how leading AI shopping assistants respond to your customer's query in real timeâ€¦`,
   (q: string) => `Running "${q}" through AI engines simultaneously. We'll highlight every mention of your brand as responses arrive.`,
 ];
 function platformMsg(query: string, count: number) {
   return TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)](query, count);
 }
 
-/* ─── Brand highlight ─── */
+/* â”€â”€â”€ Brand highlight â”€â”€â”€ */
 function Highlighted({ text, brand }: { text: string; brand: string }) {
   if (!text || !brand) return <>{text}</>;
   const esc = brand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -45,7 +45,7 @@ function Highlighted({ text, brand }: { text: string; brand: string }) {
   );
 }
 
-/* ─── Model response card (fixed width for horizontal scroll) ─── */
+/* â”€â”€â”€ Model response card (fixed width for horizontal scroll) â”€â”€â”€ */
 function ModelCard({
   engine,
   brand,
@@ -123,7 +123,7 @@ function ModelCard({
                   fontWeight: 600,
                 }}
               >
-                {engine.mentioned ? "✓ Mentioned" : "✗ Not found"}
+                {engine.mentioned ? "Mentioned" : "Not found"}
               </span>
               {engine.mentioned && engine.position && (
                 <span style={{ fontSize: "11px", color: "rgb(251,191,36)", fontWeight: 700 }}>
@@ -185,8 +185,8 @@ function ModelCard({
                 engine.sentiment === "positive"
                   ? "rgb(34,197,94)"
                   : engine.sentiment === "negative"
-                  ? "rgb(239,68,68)"
-                  : "rgb(156,163,175)",
+                    ? "rgb(239,68,68)"
+                    : "rgb(156,163,175)",
             }}
           >
             {engine.sentiment}
@@ -197,7 +197,7 @@ function ModelCard({
   );
 }
 
-/* ─── Pending spinner card ─── */
+/* â”€â”€â”€ Pending spinner card â”€â”€â”€ */
 function PendingCard({ modelId }: { modelId: string }) {
   const { name, color } = getEngineMeta(modelId);
   return (
@@ -231,14 +231,14 @@ function PendingCard({ modelId }: { modelId: string }) {
           {name}
         </p>
         <p className="animate-pulse" style={{ color: "rgb(107,114,128)", fontSize: "12px" }}>
-          Querying…
+          Queryingâ€¦
         </p>
       </div>
     </div>
   );
 }
 
-/* ─── Final report card ─── */
+/* â”€â”€â”€ Final report card â”€â”€â”€ */
 function ReportCard({
   scoreData,
   scanId,
@@ -259,8 +259,8 @@ function ReportCard({
     totalScore >= 70
       ? "rgb(34,197,94)"
       : totalScore >= 40
-      ? "rgb(251,191,36)"
-      : "rgb(239,68,68)";
+        ? "rgb(251,191,36)"
+        : "rgb(239,68,68)";
 
   return (
     <div
@@ -298,7 +298,7 @@ function ReportCard({
         <span style={{ color: "rgb(107,114,128)", fontSize: "12px" }}>
           Brand:{" "}
           <span style={{ color: "rgb(192,132,252)", fontWeight: 600 }}>{brand}</span>
-          <span style={{ margin: "0 8px", opacity: 0.3 }}>·</span>
+          <span style={{ margin: "0 8px", opacity: 0.3 }}>Â·</span>
           <span style={{ color: "rgb(156,163,175)" }}>&ldquo;{query}&rdquo;</span>
         </span>
       </div>
@@ -422,7 +422,7 @@ function ReportCard({
               >
                 {c.brand}
                 <span style={{ color: "rgb(75,85,99)", marginLeft: "4px" }}>
-                  ×{c.timesMentioned}
+                  Ã—{c.timesMentioned}
                 </span>
               </span>
             ))}
@@ -458,11 +458,11 @@ function ReportCard({
               boxShadow: "0 0 16px rgba(145,75,241,0.3)",
             }}
           >
-            View Full Report →
+            View Full Report
           </Link>
         ) : (
           <span style={{ color: "rgb(107,114,128)", fontSize: "13px" }}>
-            ⚠ Report not saved — log in to save results
+            âš  Report not saved â€” log in to save results
           </span>
         )}
         <button
@@ -482,14 +482,14 @@ function ReportCard({
             fontFamily: "var(--font-outfit)",
           }}
         >
-          ← New Diagnostic
+          New Diagnostic
         </button>
       </div>
     </div>
   );
 }
 
-/* ─── Suggestions ─── */
+/* â”€â”€â”€ Suggestions â”€â”€â”€ */
 const SUGGESTIONS = [
   "best protein powder for muscle gain",
   "top rated magnesium supplement for sleep",
@@ -498,7 +498,29 @@ const SUGGESTIONS = [
   "best noise cancelling headphones 2024",
 ];
 
-/* ─── Main component ─── */
+/* â”€â”€â”€ Main component â”€â”€â”€ */
+interface RunClientProps {
+  userId: string;
+  savedBrand: string;
+  userName: string;
+}
+
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€ Layout Wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function Container({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="w-full flex justify-center px-4">
+      <div className="w-full max-w-5xl">{children}</div>
+    </div>
+  );
+}
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€ SAME HELPERS (unchanged) â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+// keep your TEMPLATES, Highlighted, ModelCard, PendingCard, ReportCard EXACTLY SAME
+// (no need to touch logic)
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
 interface RunClientProps {
   userId: string;
   savedBrand: string;
@@ -506,18 +528,19 @@ interface RunClientProps {
 }
 
 export function RunClient({ userId, savedBrand, userName }: RunClientProps) {
-  /* Form state */
   const [query, setQuery] = useState("");
   const [brand, setBrand] = useState(savedBrand);
-  const [selectedModels, setSelectedModels] = useState<string[]>(
+
+  const [selectedModels, setSelectedModels] = useState(
     AVAILABLE_MODELS.filter((m) => m.defaultEnabled).map((m) => m.id)
   );
 
-  /* Streaming state */
   type Phase = "idle" | "streaming" | "done";
   const [phase, setPhase] = useState<Phase>("idle");
+
   const [activeQuery, setActiveQuery] = useState("");
   const [activeBrand, setActiveBrand] = useState("");
+
   const [message, setMessage] = useState("");
   const [arrived, setArrived] = useState<EngineAnalysis[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -525,12 +548,15 @@ export function RunClient({ userId, savedBrand, userName }: RunClientProps) {
   const [scoreData, setScoreData] = useState<ScoreData | null>(null);
   const [scanId, setScanId] = useState<string | null>(null);
   const [fatalError, setFatalError] = useState<string | null>(null);
+
   const started = useRef(false);
 
   function toggleModel(id: string) {
     setSelectedModels((prev) =>
       prev.includes(id)
-        ? prev.length > 1 ? prev.filter((m) => m !== id) : prev
+        ? prev.length > 1
+          ? prev.filter((m) => m !== id)
+          : prev
         : [...prev, id]
     );
   }
@@ -554,7 +580,7 @@ export function RunClient({ userId, savedBrand, userName }: RunClientProps) {
     started.current = true;
     setActiveQuery(q);
     setActiveBrand(b);
-    setMessage(platformMsg(q, selectedModels.length));
+    setMessage("Running AI visibility scan...");
     setPending([...selectedModels]);
     setArrived([]);
     setErrors({});
@@ -569,6 +595,7 @@ export function RunClient({ userId, savedBrand, userName }: RunClientProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q, brandName: b, userId, selectedModels }),
       });
+
       if (!res.ok || !res.body) {
         setFatalError(`Request failed: ${res.status}`);
         setPhase("done");
@@ -580,362 +607,164 @@ export function RunClient({ userId, savedBrand, userName }: RunClientProps) {
       let buffer = "";
 
       while (true) {
-        const { done: streamDone, value } = await reader.read();
-        if (streamDone) break;
+        const { done, value } = await reader.read();
+        if (done) break;
+
         buffer += decoder.decode(value, { stream: true });
         const events = buffer.split("\n\n");
         buffer = events.pop() ?? "";
 
         for (const event of events) {
           if (!event.startsWith("data: ")) continue;
-          try {
-            const parsed = JSON.parse(event.slice(6)) as {
-              type: string;
-              data?: EngineAnalysis;
-              modelId?: string;
-              error?: string;
-              scanId?: string | null;
-              scoreData?: ScoreData;
-              message?: string;
-            };
 
-            if (parsed.type === "engine" && parsed.data) {
-              setArrived((prev) => [...prev, parsed.data!]);
-              setPending((prev) => prev.filter((m) => m !== parsed.data!.engine));
-            } else if (parsed.type === "engine_error") {
-              if (parsed.error) {
-                setErrors((prev) => ({ ...prev, [parsed.modelId!]: parsed.error! }));
-              }
-              if (parsed.data) {
-                setArrived((prev) => [...prev, parsed.data!]);
-              }
-              setPending((prev) => prev.filter((m) => m !== parsed.modelId));
-            } else if (parsed.type === "complete") {
-              if (parsed.scoreData) setScoreData(parsed.scoreData);
-              setScanId(parsed.scanId ?? null);
-              setPhase("done");
-            } else if (parsed.type === "error") {
-              setFatalError(parsed.message ?? "Unknown error");
-              setPhase("done");
-            }
-          } catch {
-            // ignore malformed SSE frame
+          const parsed = JSON.parse(event.slice(6));
+
+          if (parsed.type === "engine") {
+            setArrived((p) => [...p, parsed.data]);
+            setPending((p) => p.filter((m) => m !== parsed.data.engine));
+          }
+
+          if (parsed.type === "complete") {
+            setScoreData(parsed.scoreData);
+            setScanId(parsed.scanId ?? null);
+            setPhase("done");
           }
         }
       }
     } catch (err: unknown) {
-      if (err instanceof Error) setFatalError(err.message);
+      setFatalError(err instanceof Error ? err.message : "Unexpected scan error");
       setPhase("done");
     }
   }
 
   const firstName = userName.split(" ")[0] || "there";
-  const canSubmit = query.trim().length > 0 && brand.trim().length > 0;
+  const canSubmit = query.trim() && brand.trim();
 
-  /* ── IDLE: form ── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€ IDLE UI â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
   if (phase === "idle") {
     return (
-      <div
-        className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 pb-16"
-        style={{ fontFamily: "var(--font-outfit)" }}
-      >
-        {/* Ambient glow */}
-        <div
-          className="fixed pointer-events-none"
-          style={{
-            top: "20%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "600px",
-            height: "300px",
-            background: "radial-gradient(ellipse, rgba(145,75,241,0.07) 0%, transparent 70%)",
-            zIndex: 0,
-          }}
-        />
+      <Container>
+        <div className="min-h-[70vh] flex flex-col justify-center gap-8">
 
-        <div className="relative z-10 w-full max-w-2xl flex flex-col items-center gap-8">
-          {/* Greeting */}
-          <div className="text-center">
-            <h1
-              className="font-bold mb-2"
-              style={{ fontSize: "clamp(26px, 5vw, 40px)", color: "rgb(255,255,255)", lineHeight: 1.2 }}
-            >
-              Hello, {firstName} 👋
+          {/* Header */}
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#221536] via-[#181623] to-[#101112] px-6 py-8 text-center">
+            <h1 className="text-3xl font-bold text-white">
+              Hello, {firstName}👋
             </h1>
-            <p style={{ color: "rgb(107,114,128)", fontSize: "16px" }}>
-              What would your customers search for today?
+            <p className="text-gray-400 mt-2">
+              What would your customers search for?
             </p>
           </div>
 
-          {/* Input card */}
-          <div
-            className="w-full"
-            style={{
-              backgroundColor: "rgb(39,40,41)",
-              borderRadius: "20px",
-              border: "1px solid rgba(255,255,255,0.08)",
-              overflow: "hidden",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-            }}
-          >
-            {/* Query row */}
-            <div className="flex items-start gap-3 px-5 pt-5 pb-4">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgb(145,75,241)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: "3px", flexShrink: 0 }}>
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              </svg>
-              <div className="flex-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "rgb(107,114,128)" }}>
-                  Customer Query
-                </label>
-                <textarea
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSubmit(); } }}
-                  placeholder='e.g. "best magnesium supplement for sleep"'
-                  rows={2}
-                  style={{ width: "100%", background: "transparent", border: "none", outline: "none", color: "rgb(255,255,255)", fontSize: "15px", resize: "none", fontFamily: "var(--font-outfit)", lineHeight: 1.5 }}
-                />
-              </div>
+          {/* Input Card */}
+          <div className="bg-[#272829] border border-white/10 rounded-2xl p-5 space-y-5">
+
+            <textarea
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Customer query..."
+              className="w-full rounded-xl border border-white/10 bg-[#101112] px-4 py-3 text-white outline-none resize-none focus:border-purple-400/60"
+            />
+
+            <input
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
+              placeholder="Your brand"
+              className="w-full rounded-xl border border-white/10 bg-[#101112] px-4 py-3 text-white outline-none focus:border-purple-400/60"
+            />
+
+            {/* Models */}
+            <div className="flex flex-wrap gap-2">
+              {AVAILABLE_MODELS.map((m) => {
+                const on = selectedModels.includes(m.id);
+                return (
+                  <button
+                    key={m.id}
+                    onClick={() => toggleModel(m.id)}
+                    className={`px-3 py-1 rounded-full text-xs border ${on
+                      ? "border-purple-500 text-purple-400"
+                      : "border-white/10 text-gray-500"
+                      }`}
+                  >
+                    {m.name}
+                  </button>
+                );
+              })}
             </div>
 
-            <div style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.06)", margin: "0 20px" }} />
-
-            {/* Brand row */}
-            <div className="flex items-center gap-3 px-5 py-4">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgb(192,132,252)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" /><line x1="7" y1="7" x2="7.01" y2="7" />
-              </svg>
-              <div className="flex-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "rgb(107,114,128)" }}>
-                  Your Brand
-                </label>
-                <input
-                  type="text"
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
-                  placeholder='e.g. "LiveConscious" or "MagTech Pro"'
-                  style={{ width: "100%", background: "transparent", border: "none", outline: "none", color: "rgb(255,255,255)", fontSize: "15px", fontFamily: "var(--font-outfit)" }}
-                />
-              </div>
-            </div>
-
-            <div style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.06)" }} />
-
-            {/* Models + submit */}
-            <div className="flex items-center justify-between gap-3 px-4 py-3 flex-wrap">
-              <div className="flex flex-wrap gap-2">
-                {AVAILABLE_MODELS.map((m) => {
-                  const on = selectedModels.includes(m.id);
-                  return (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => toggleModel(m.id)}
-                      title={`${m.tagline}${!m.defaultEnabled ? " — requires API key" : ""}`}
-                      style={{
-                        display: "inline-flex", alignItems: "center", gap: "6px",
-                        padding: "5px 10px", borderRadius: "99px", fontSize: "12px",
-                        fontFamily: "var(--font-outfit)", fontWeight: 500, cursor: "pointer",
-                        transition: "all 0.15s",
-                        border: `1px solid ${on ? m.color : "rgba(255,255,255,0.1)"}`,
-                        backgroundColor: on ? `${m.color}15` : "transparent",
-                        color: on ? m.color : "rgb(107,114,128)",
-                      }}
-                    >
-                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: on ? m.color : "rgb(75,85,99)", flexShrink: 0 }} />
-                      {m.name}
-                    </button>
-                  );
-                })}
-              </div>
+            {/* CTA */}
+            <div className="flex justify-end">
               <button
                 onClick={handleSubmit}
                 disabled={!canSubmit}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: "7px",
-                  padding: "9px 18px", borderRadius: "10px", fontSize: "14px",
-                  fontWeight: 600, fontFamily: "var(--font-outfit)", border: "none",
-                  cursor: canSubmit ? "pointer" : "not-allowed",
-                  backgroundColor: canSubmit ? "rgb(145,75,241)" : "rgb(50,51,52)",
-                  color: canSubmit ? "rgb(255,255,255)" : "rgb(75,85,99)",
-                  boxShadow: canSubmit ? "0 0 20px rgba(145,75,241,0.35)" : "none",
-                  transition: "all 0.15s", flexShrink: 0,
-                }}
+                className="px-5 py-2 rounded-xl bg-[#914bf1] text-white disabled:opacity-40"
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" />
-                </svg>
-                Run
+                Run Diagnostic
               </button>
             </div>
           </div>
 
-          {/* Suggestion chips */}
-          <div className="w-full">
-            <p className="text-xs uppercase tracking-wider font-semibold mb-3 text-center" style={{ color: "rgb(55,65,75)" }}>
-              Try a sample query
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setQuery(s)}
-                  className="transition-all hover:opacity-80"
-                  style={{
-                    padding: "7px 14px", borderRadius: "99px", fontSize: "13px",
-                    fontFamily: "var(--font-outfit)",
-                    backgroundColor: "rgb(39,40,41)", color: "rgb(107,114,128)",
-                    border: "1px solid rgba(255,255,255,0.07)", cursor: "pointer",
-                  }}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {savedBrand ? (
-            <p className="text-xs text-center" style={{ color: "rgb(55,65,75)" }}>
-              Brand pre-filled from your{" "}
-              <Link href="/dashboard/settings" style={{ color: "rgb(145,75,241)", textDecoration: "none" }}>Settings</Link>.
-            </p>
-          ) : (
-            <p className="text-xs text-center" style={{ color: "rgb(55,65,75)" }}>
-              Save your brand in{" "}
-              <Link href="/dashboard/settings" style={{ color: "rgb(145,75,241)", textDecoration: "none" }}>Settings</Link>{" "}
-              to pre-fill it every time.
-            </p>
-          )}
+          {/* Hint */}
+          <p className="text-xs text-center text-gray-500">
+            {savedBrand
+              ? "Brand auto-filled from settings"
+              : "Set your brand in Settings for autofill"}
+          </p>
         </div>
-      </div>
+      </Container>
     );
   }
 
-  /* ── STREAMING / DONE: results view ── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€ RESULTS UI â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
   return (
-    <div className="space-y-6 pb-12" style={{ fontFamily: "var(--font-outfit)" }}>
-      {/* Mini header showing what's being scanned */}
-      <div
-        className="flex items-center justify-between flex-wrap gap-3 pb-5"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-      >
-        <div>
-          <p className="text-xs uppercase tracking-wider font-semibold mb-1" style={{ color: "rgb(107,114,128)" }}>
-            {phase === "done" ? "Diagnostic Complete" : "Running Diagnostic…"}
-          </p>
-          <h2 className="font-bold text-lg" style={{ color: "rgb(255,255,255)" }}>
-            &ldquo;{activeQuery}&rdquo;
-          </h2>
-          <p className="text-sm mt-0.5" style={{ color: "rgb(107,114,128)" }}>
-            Brand: <span style={{ color: "rgb(192,132,252)", fontWeight: 600 }}>{activeBrand}</span>
-          </p>
+    <Container>
+      <div className="space-y-6 pb-12">
+
+        {/* Header */}
+        <div className="flex justify-between items-center border-b border-white/10 pb-4">
+          <div>
+            <h2 className="text-white font-semibold text-lg">
+              â€œ{activeQuery}â€
+            </h2>
+            <p className="text-sm text-gray-400">
+              Brand: <span className="text-purple-400">{activeBrand}</span>
+            </p>
+          </div>
+
+          {phase === "done" && (
+            <button
+              onClick={resetToIdle}
+              className="text-sm text-gray-400 border px-3 py-1 rounded-md"
+            >
+              New Scan
+            </button>
+          )}
         </div>
-        {phase === "done" && (
-          <button
-            onClick={resetToIdle}
-            style={{
-              padding: "8px 16px", borderRadius: "10px", fontSize: "13px",
-              backgroundColor: "rgb(39,40,41)", color: "rgb(156,163,175)",
-              border: "1px solid rgba(255,255,255,0.08)", cursor: "pointer",
-              fontFamily: "var(--font-outfit)",
-            }}
-          >
-            ← New Diagnostic
-          </button>
+
+        {/* Responses */}
+        <div className="overflow-x-auto flex gap-4 pb-2">
+          {arrived.map((e) => (
+            <ModelCard key={e.engine} engine={e} brand={activeBrand} />
+          ))}
+          {pending.map((id) => (
+            <PendingCard key={id} modelId={id} />
+          ))}
+        </div>
+
+        {/* Report */}
+        {phase === "done" && scoreData && (
+          <ReportCard
+            scoreData={scoreData}
+            scanId={scanId}
+            brand={activeBrand}
+            query={activeQuery}
+            onNewScan={resetToIdle}
+          />
         )}
       </div>
-
-      {/* Platform message bubble */}
-      {message && (
-        <div className="flex items-start gap-3">
-          <div
-            className="shrink-0 flex items-center justify-center overflow-hidden"
-            style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "rgb(145,75,241)" }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-xs font-semibold mb-1" style={{ color: "rgb(145,75,241)" }}>AEOlytics</p>
-            <div
-              className={phase === "streaming" ? "animate-pulse" : ""}
-              style={{
-                padding: "10px 14px",
-                backgroundColor: "rgb(39,40,41)",
-                borderRadius: "0 12px 12px 12px",
-                border: "1px solid rgba(255,255,255,0.06)",
-                maxWidth: "600px",
-              }}
-            >
-              <p style={{ color: "rgb(217,217,217)", fontSize: "14px", lineHeight: 1.6 }}>{message}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Fatal error */}
-      {fatalError && (
-        <div
-          style={{
-            padding: "12px 16px", borderRadius: "12px", fontSize: "14px",
-            backgroundColor: "rgba(239,68,68,0.08)",
-            border: "1px solid rgba(239,68,68,0.25)",
-            color: "rgb(239,68,68)",
-          }}
-        >
-          Error: {fatalError}
-        </div>
-      )}
-
-      {/* Horizontal scrollable model cards */}
-      {(arrived.length > 0 || pending.length > 0) && (
-        <div>
-          <p className="text-xs uppercase tracking-wider font-semibold mb-3" style={{ color: "rgb(107,114,128)" }}>
-            Model Responses
-            {arrived.length > 0 && (
-              <span style={{ color: "rgb(145,75,241)", marginLeft: "8px" }}>
-                — brand <span style={{ backgroundColor: "rgba(145,75,241,0.2)", color: "rgb(192,132,252)", borderRadius: "3px", padding: "0 3px" }}>{activeBrand}</span> is highlighted
-              </span>
-            )}
-          </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              overflowX: "auto",
-              paddingBottom: "8px",
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(145,75,241,0.3) transparent",
-            }}
-          >
-            {arrived.map((engine) => (
-              <ModelCard
-                key={engine.engine}
-                engine={engine}
-                brand={activeBrand}
-                errorMsg={errors[engine.engine]}
-              />
-            ))}
-            {pending.map((id) => (
-              <PendingCard key={id} modelId={id} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Final report card */}
-      {phase === "done" && scoreData && (
-        <ReportCard
-          scoreData={scoreData}
-          scanId={scanId}
-          brand={activeBrand}
-          query={activeQuery}
-          onNewScan={resetToIdle}
-        />
-      )}
-    </div>
+    </Container>
   );
 }
+

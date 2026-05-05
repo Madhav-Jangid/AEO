@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// ─── Legacy AEO Scout types (kept for backward compat) ───────────────────────
 export type PlanType = "free" | "premium";
 export type StorePlatform = "amazon" | "flipkart" | "meesho";
 export type ProviderName = "gemini" | "gpt" | "claude";
@@ -17,9 +15,6 @@ export interface ProductPreview {
   image: string;
 }
 
-// ─── AEO Diagnostic Tool types ───────────────────────────────────────────────
-
-/** Open string so any model id ("llama3", "mixtral", "gemini", legacy "gpt"/"claude") works */
 export type Engine = string;
 export type Grade = "A" | "B" | "C" | "D" | "F";
 export type Sentiment = "positive" | "neutral" | "negative";
@@ -36,11 +31,9 @@ export interface EngineAnalysis {
 
 export interface CompetitorRow {
   brand: string;
-  /** Dynamic map of engineId → mentioned (new format) */
   mentionedBy?: Record<string, boolean>;
   timesMentioned: number;
   avgPosition: number | null;
-  /** Legacy fields kept for backward compat with old scan records */
   mentionedByGpt?: boolean;
   mentionedByClaude?: boolean;
   mentionedByGemini?: boolean;
@@ -88,7 +81,6 @@ export interface AnalysisResult {
   brand: string;
   results: EngineAnalysis[];
   score_data: ScoreData;
-  // Additional properties for ProductDetailClient
   modelResults?: Array<{
     model: string;
     response: string;
@@ -109,15 +101,14 @@ export interface ProductDetailPayload {
     platform?: string;
     lastAnalyzed?: string;
     freeLimitReached?: boolean;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
   };
   analysesToday: number;
   latestAnalysis?: AnalysisResult;
 }
 
-
 export type Cookie = {
   name: string;
   value: string;
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
 };

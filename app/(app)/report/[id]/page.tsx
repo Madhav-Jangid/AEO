@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getEngineMeta } from "@/lib/config/models";
 import type { Scan, CompetitorRow } from "@/lib/types";
@@ -50,7 +50,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
   };
   const gradeClass = `${gradeColors[grade] ?? "text-slate-400"} ${gradeBorder[grade] ?? "border-slate-400 bg-slate-400/10"}`;
 
-  // Competitor helper — resolves both new (mentionedBy) and legacy field formats
+  // Competitor helper â€” resolves both new (mentionedBy) and legacy field formats
   function isMentionedBy(comp: CompetitorRow, engineId: string): boolean {
     if (comp.mentionedBy) return comp.mentionedBy[engineId] ?? false;
     if (engineId === "gpt") return comp.mentionedByGpt ?? false;
@@ -63,8 +63,8 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="space-y-8 pb-12" style={{ fontFamily: "var(--font-outfit)" }}>
-      {/* ── A. Header ── */}
-      <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+      {/* â”€â”€ A. Header â”€â”€ */}
+      <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 rounded-3xl border border-white/10 bg-gradient-to-br from-[#221536] via-[#181623] to-[#101112] p-6">
         <div>
           <h1 className="text-xl font-medium" style={{ color: "rgb(217,217,217)" }}>
             Diagnostic Report:{" "}
@@ -73,7 +73,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             </span>
           </h1>
           <p className="text-sm mt-1" style={{ color: "rgb(107,114,128)" }}>
-            Brand: <span style={{ color: "rgb(217,217,217)" }}>{brand_name}</span>
+            Brand: <span style={{ color: "rgb(192,132,252)" }}>{brand_name}</span>
             &nbsp;&bull;&nbsp;
             {new Date(created_at).toLocaleString()}
           </p>
@@ -83,10 +83,10 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         </div>
       </header>
 
-      {/* ── B. Overall Score ── */}
+      {/* â”€â”€ B. Overall Score â”€â”€ */}
       <section
         className="flex flex-col md:flex-row items-center gap-8 p-6 sm:p-8"
-        style={{ backgroundColor: "rgb(39,40,41)", borderRadius: "20px" }}
+        style={{ backgroundColor: "rgb(21,23,25)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}
       >
         <div
           className={`flex items-center justify-center w-32 h-32 rounded-full border-4 ${gradeClass}`}
@@ -107,7 +107,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
           </p>
           <div
             className="mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
-            style={{ backgroundColor: "rgb(16,17,18)", border: "1px solid rgba(255,255,255,0.08)" }}
+            style={{ backgroundColor: "rgba(145,75,241,0.12)", border: "1px solid rgba(145,75,241,0.35)" }}
           >
             <span className="flex h-2 w-2 rounded-full" style={{ backgroundColor: "rgb(145,75,241)" }} />
             <span style={{ color: "rgb(217,217,217)" }}>
@@ -119,7 +119,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         </div>
       </section>
 
-      {/* ── C. Per-Engine Breakdown ── */}
+      {/* â”€â”€ C. Per-Engine Breakdown â”€â”€ */}
       <section>
         <h3 className="text-xl font-bold mb-4" style={{ color: "rgb(255,255,255)" }}>
           Per-Model Breakdown
@@ -136,8 +136,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                 key={engine.engine}
                 className="flex flex-col overflow-hidden"
                 style={{
-                  backgroundColor: "rgb(39,40,41)",
-                  borderRadius: "20px",
+                  backgroundColor: "rgb(21,23,25)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)",
                   border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
@@ -201,7 +200,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                           Position
                         </span>
                         <span className="text-sm font-bold" style={{ color: "rgb(255,255,255)" }}>
-                          {engine.position ? `#${engine.position}` : "—"}
+                          {engine.position ? `#${engine.position}` : "â€”"}
                         </span>
                       </div>
                       <div
@@ -218,8 +217,8 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                               engine.sentiment === "positive"
                                 ? "rgb(34,197,94)"
                                 : engine.sentiment === "negative"
-                                ? "rgb(239,68,68)"
-                                : "rgb(217,217,217)",
+                                  ? "rgb(239,68,68)"
+                                  : "rgb(217,217,217)",
                           }}
                         >
                           {engine.sentiment ?? "Neutral"}
@@ -281,7 +280,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         </div>
       </section>
 
-      {/* ── D. Competitor Intelligence ── */}
+      {/* â”€â”€ D. Competitor Intelligence â”€â”€ */}
       {competitors && competitors.length > 0 && (
         <section>
           <h3 className="text-xl font-bold mb-4" style={{ color: "rgb(255,255,255)" }}>
@@ -289,7 +288,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
           </h3>
           <div
             className="overflow-hidden"
-            style={{ backgroundColor: "rgb(39,40,41)", borderRadius: "20px" }}
+            style={{ backgroundColor: "rgb(21,23,25)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}
           >
             <div className="overflow-x-auto">
               <table className="w-full text-sm" style={{ borderCollapse: "collapse" }}>
@@ -354,7 +353,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                         className="px-6 py-4 text-center"
                         style={{ color: "rgb(217,217,217)" }}
                       >
-                        {comp.avgPosition ? `#${comp.avgPosition}` : "—"}
+                        {comp.avgPosition ? `#${comp.avgPosition}` : "â€”"}
                       </td>
                     </tr>
                   ))}
@@ -365,7 +364,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         </section>
       )}
 
-      {/* ── E. Actionable Insights ── */}
+      {/* â”€â”€ E. Actionable Insights â”€â”€ */}
       <section>
         <h3 className="text-xl font-bold mb-4" style={{ color: "rgb(255,255,255)" }}>
           Actionable Recommendations
@@ -375,3 +374,5 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
     </div>
   );
 }
+
+

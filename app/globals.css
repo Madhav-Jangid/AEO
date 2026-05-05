@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: rgb(16, 17, 18);
+  --foreground: rgb(255, 255, 255);
+  --purple: rgb(145, 75, 241);
+  --gray: rgb(217, 217, 217);
+  --dark-gray: rgb(39, 40, 41);
+  --font-outfit: "Outfit", sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-purple: var(--purple);
+  --color-gray: var(--gray);
+  --color-dark-gray: var(--dark-gray);
+  --font-sans: var(--font-outfit);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+
+  --animate-rotate-slow: rotateSlow 120s linear infinite;
+
+  @keyframes rotateSlow {
+    from {
+      transform: rotate(0deg) scale(1.1);
+    }
+
+    to {
+      transform: rotate(360deg) scale(1.1);
+    }
   }
 }
 
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: rgb(16, 17, 18);
+  color: rgb(255, 255, 255);
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Phone breakpoint adjustments (< 810px) */
+@media (max-width: 809px) {
+  .section-padding {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* Marquee / Ticker animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
+}
+
+.animate-marquee-up {
+  animation: marquee-up 20s linear infinite;
+}
+
+.animate-marquee-down {
+  animation: marquee-down 20s linear infinite;
+}
+
+@keyframes marquee-up {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes marquee-down {
+  0% {
+    transform: translateY(-50%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Print styles for report download */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .print-card {
+    break-inside: avoid;
+  }
 }

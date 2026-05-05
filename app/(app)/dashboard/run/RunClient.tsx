@@ -422,7 +422,7 @@ function ReportCard({
               >
                 {c.brand}
                 <span style={{ color: "rgb(75,85,99)", marginLeft: "4px" }}>
-                  Ã—{c.timesMentioned}
+                  x{c.timesMentioned}
                 </span>
               </span>
             ))}
@@ -726,7 +726,7 @@ export function RunClient({ userId, savedBrand, userName }: RunClientProps) {
         <div className="flex justify-between items-center border-b border-white/10 pb-4">
           <div>
             <h2 className="text-white font-semibold text-lg">
-              â€œ{activeQuery}â€
+              {activeQuery}
             </h2>
             <p className="text-sm text-gray-400">
               Brand: <span className="text-purple-400">{activeBrand}</span>

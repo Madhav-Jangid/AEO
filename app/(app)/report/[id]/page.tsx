@@ -137,7 +137,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                 className="flex flex-col overflow-hidden"
                 style={{
                   backgroundColor: "rgb(21,23,25)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  // border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
                 {/* Card header */}

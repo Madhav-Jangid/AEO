@@ -6,7 +6,7 @@
   --purple: rgb(145, 75, 241);
   --gray: rgb(217, 217, 217);
   --dark-gray: rgb(39, 40, 41);
-  --font-outfit: "Outfit", sans-serif;
+  --font-outfit: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
 }
 
 @theme inline {

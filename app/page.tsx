@@ -391,13 +391,13 @@ function NavBar() {
 
           {/* Mobile hamburger — accessible, working */}
           <button
+            title="Toggle Menu"
             type="button"
             aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
-            className="flex flex-col items-center justify-center gap-[4px] w-[44px] h-[44px] md:hidden"
-            style={{ backgroundColor: "rgb(39,40,41)", borderRadius: "8px" }}
+            className="flex flex-col items-center justify-center gap-[4px] w-[44px] h-[44px] md:hidden bg-[rgb(39,40,41)] rounded-[8px]"
           >
             {open ? (
               <CloseIcon />
@@ -885,7 +885,7 @@ function TestimonialsSection() {
                 </span>
               </div>
               <p className="font-regular" style={{ color: "rgb(217,217,217)", fontSize: "clamp(14px, 3vw, 18px)", lineHeight: "1.5em" }}>
-                "{t.text}"
+                &quot;{t.text}&quot;
               </p>
             </div>
           ))}

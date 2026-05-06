@@ -50,12 +50,12 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-white">
-          {mode === "login" ? "Welcome back" : "Create an account"}
+          {mode === "login" ? "Welcome back" : "Create your account"}
         </h1>
         <p className="mt-2 text-base text-slate-400">
           {mode === "login"
-            ? "Sign in to view your diagnostic reports."
-            : "Start analyzing your AI visibility for free."}
+            ? "Sign in to view your saved diagnostics and reports."
+            : "Start checking how your brand appears in AI answers."}
         </p>
       </div>
 
@@ -123,7 +123,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           className="w-full rounded-xl bg-[rgb(145,75,241)] hover:bg-[rgb(130,65,225)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors px-4 py-3.5 text-sm font-semibold text-white shadow-[0_0_15px_rgba(145,75,241,0.3)]"
         >
           {loading
-            ? "Please wait…"
+            ? "Please wait...€¦"
             : mode === "login"
             ? "Sign in"
             : "Create account"}
@@ -138,3 +138,4 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     </div>
   );
 }
+

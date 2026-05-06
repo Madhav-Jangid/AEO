@@ -1,4 +1,5 @@
-﻿import type { Scan } from "@/lib/types";
+import type { Scan } from "@/lib/types";
+import { Card } from "@/components/ui/primitives";
 
 interface InsightsSectionProps {
   scan: Scan;
@@ -9,35 +10,22 @@ export function InsightsSection({ scan }: InsightsSectionProps) {
 
   const { insights = [] } = scan.score_data;
 
-  if (!insights || insights.length === 0) {
+  if (!insights.length) {
     return (
-      <div className="p-6 rounded-2xl text-center border border-white/10" style={{ backgroundColor: "rgb(21,23,25)" }}>
-        <p className="text-sm" style={{ color: "rgb(156,163,175)" }}>
-          No insights available for this scan.
-        </p>
-      </div>
+      <Card className="p-6 text-center">
+        <p className="text-sm text-neutral-400">No recommendations available for this scan yet.</p>
+      </Card>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div className="grid gap-3 md:grid-cols-2">
       {insights.map((insight, idx) => (
-        <div
-          key={idx}
-          className="p-4 rounded-2xl border border-white/10"
-          style={{
-            backgroundColor: "rgb(21,23,25)",
-          }}
-        >
-          <h3 className="font-semibold text-sm" style={{ color: "rgb(255,255,255)" }}>
-            {insight.title}
-          </h3>
-          <p className="mt-1 text-sm" style={{ color: "rgb(217,217,217)" }}>
-            {insight.description}
-          </p>
-        </div>
+        <Card key={`${insight.title}-${idx}`} className="p-4">
+          <h3 className="text-sm font-semibold text-white">{insight.title}</h3>
+          <p className="mt-1 text-sm text-neutral-300">{insight.description}</p>
+        </Card>
       ))}
     </div>
   );
 }
-

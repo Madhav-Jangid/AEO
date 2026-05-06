@@ -1,6 +1,11 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { SettingsClient } from "./SettingsClient";
+
+export const metadata: Metadata = {
+  title: "Settings",
+};
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -18,7 +23,7 @@ export default async function SettingsPage() {
     "";
 
   return (
-    <div className="max-w-3xl mx-auto w-full">
+    <div className="w-full">
       <SettingsClient
         initialName={name}
         initialEmail={user.email ?? ""}

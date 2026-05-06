@@ -1,24 +1,15 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Button, Card, Input } from "@/components/ui/primitives";
 
-function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-[#151719] p-6">
-      <h3 className="text-base font-semibold text-white">{title}</h3>
-      {subtitle ? <p className="mt-1 text-xs text-neutral-400">{subtitle}</p> : null}
-      <div className="mt-5">{children}</div>
-    </section>
-  );
-}
-
-function Input({ className = "", ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      {...props}
-      className={`w-full rounded-xl border border-white/10 bg-[#101112] px-4 py-2.5 text-sm text-white outline-none transition focus:border-purple-400/60 ${className}`}
-    />
+    <div>
+      <label className="mb-1.5 block text-sm text-neutral-300">{label}</label>
+      {children}
+    </div>
   );
 }
 
@@ -46,7 +37,6 @@ export function SettingsClient({
   initialBrandUrl: string;
 }) {
   const supabase = createClient();
-
   const [name, setName] = useState(initialName);
   const [brand, setBrand] = useState(initialBrandName);
   const [url, setUrl] = useState(initialBrandUrl);
@@ -62,11 +52,7 @@ export function SettingsClient({
   async function save() {
     setLoading(true);
     await supabase.auth.updateUser({
-      data: {
-        full_name: name,
-        brand_name: brand,
-        brand_url: url,
-      },
+      data: { full_name: name, brand_name: brand, brand_url: url },
     });
     setLoading(false);
     setSaved(true);
@@ -79,71 +65,70 @@ export function SettingsClient({
   }
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6">
-      <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#221536] via-[#181623] to-[#101112] p-6 md:p-8">
-        <p className="text-xs uppercase tracking-[0.22em] text-purple-300/80">Settings</p>
-        <h1 className="mt-1 text-2xl font-semibold text-white md:text-3xl">Account and brand preferences</h1>
-        <p className="mt-2 text-sm text-neutral-300">Keep your diagnostic defaults and profile details up to date.</p>
-      </section>
-
-      <Card title="Brand Profile" subtitle="Auto-filled in diagnostics">
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm text-neutral-300">Brand Name</label>
-            <Input value={brand} onChange={(event) => setBrand(event.target.value)} />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm text-neutral-300">Website URL</label>
-            <Input value={url} onChange={(event) => setUrl(event.target.value)} />
-          </div>
-        </div>
+    <div className="mx-auto w-full max-w-[980px] space-y-5">
+      <Card className="border-white/15 bg-gradient-to-br from-[#1e1530] via-[#141922] to-[#0f1113] p-6 md:p-8">
+        <p className="text-xs uppercase tracking-[0.2em] text-purple-200/80">Settings</p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">Profile and workspace defaults</h1>
+        <p className="mt-2 text-sm text-neutral-300">Keep your account and brand details current so each diagnostic starts with the right context.</p>
       </Card>
 
-      <Card title="Profile">
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm text-neutral-300">Display Name</label>
-            <Input value={name} onChange={(event) => setName(event.target.value)} />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="p-5">
+          <p className="text-sm font-medium text-white">Brand profile</p>
+          <p className="mt-1 text-xs text-neutral-400">Used as default brand context in new runs.</p>
+          <div className="mt-4 space-y-4">
+            <Row label="Brand name">
+              <Input value={brand} onChange={(e) => setBrand(e.target.value)} />
+            </Row>
+            <Row label="Website URL">
+              <Input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://" />
+            </Row>
           </div>
-          <div>
-            <label className="mb-1 block text-sm text-neutral-300">Email</label>
-            <Input value={initialEmail} disabled className="opacity-70" />
-          </div>
-        </div>
-      </Card>
+        </Card>
 
-      <Card title="Notifications">
-        <div className="space-y-4">
+        <Card className="p-5">
+          <p className="text-sm font-medium text-white">Account</p>
+          <p className="mt-1 text-xs text-neutral-400">Personal profile and sign-in details.</p>
+          <div className="mt-4 space-y-4">
+            <Row label="Display name">
+              <Input value={name} onChange={(e) => setName(e.target.value)} />
+            </Row>
+            <Row label="Email">
+              <Input value={initialEmail} disabled className="opacity-70" />
+            </Row>
+          </div>
+        </Card>
+      </div>
+
+      <Card className="p-5">
+        <p className="text-sm font-medium text-white">Notifications</p>
+        <p className="mt-1 text-xs text-neutral-400">Choose which updates you want to receive.</p>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
           {[
-            ["reports", "Report ready alerts"],
-            ["digest", "Weekly digest"],
-            ["competitors", "Competitor alerts"],
+            ["reports", "Report ready"],
+            ["digest", "Weekly summary"],
+            ["competitors", "Competitor mentions"],
           ].map(([key, label]) => (
-            <div key={key} className="flex items-center justify-between">
-              <span className="text-sm text-neutral-300">{label}</span>
-              <Toggle
-                value={notifications[key as keyof typeof notifications]}
-                onChange={(value) => setNotifications((prev) => ({ ...prev, [key]: value }))}
-              />
+            <div key={key} className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-neutral-200">{label}</p>
+                <Toggle
+                  value={notifications[key as keyof typeof notifications]}
+                  onChange={(value) => setNotifications((prev) => ({ ...prev, [key]: value }))}
+                />
+              </div>
             </div>
           ))}
         </div>
       </Card>
 
-      <section className="flex flex-wrap items-center justify-between gap-3">
-        <button
-          onClick={save}
-          disabled={loading}
-          className="rounded-xl bg-[#914bf1] px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-50"
-        >
-          {loading ? "Saving..." : saved ? "Saved" : "Save Changes"}
-        </button>
-
-        <button onClick={logout} className="text-sm text-red-400 transition hover:opacity-80">
-          Sign out
-        </button>
-      </section>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex gap-2">
+          <Button onClick={save} disabled={loading}>{loading ? "Saving..." : saved ? "Saved" : "Save changes"}</Button>
+          <Button variant="secondary" href="/dashboard">Back to overview</Button>
+        </div>
+        <Button variant="danger" onClick={logout}>Sign out</Button>
+      </div>
     </div>
   );
 }
-

@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { Card, Input } from "@/components/ui/primitives";
 
 export type HistoryItem = {
   id: string;
@@ -31,108 +32,89 @@ function applyFilter(items: HistoryItem[], filter: Filter) {
   return items.filter((item) => new Date(item.rawDate).getTime() >= now - ranges[filter]);
 }
 
-function scoreColor(score: number) {
-  if (score >= 70) return "text-emerald-400";
-  if (score >= 40) return "text-amber-300";
-  return "text-red-400";
-}
-
 export function HistoryClient({ initialItems }: { initialItems: HistoryItem[] }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>("All");
 
   const filtered = useMemo(() => {
     let items = applyFilter(initialItems, filter);
-
     if (search.trim()) {
-      const query = search.toLowerCase();
-      items = items.filter(
-        (item) => item.query.toLowerCase().includes(query) || item.brand.toLowerCase().includes(query),
-      );
+      const q = search.toLowerCase();
+      items = items.filter((item) => item.query.toLowerCase().includes(q) || item.brand.toLowerCase().includes(q));
     }
-
     return items;
   }, [initialItems, filter, search]);
 
   const total = initialItems.length;
-  const avgScore = total
-    ? Math.round(initialItems.reduce((acc, item) => acc + item.aeoScore, 0) / total)
-    : 0;
-  const avgVisibility = total
-    ? (initialItems.reduce((acc, item) => acc + item.mentionCount, 0) / total).toFixed(1)
-    : "0";
+  const avgScore = total ? Math.round(initialItems.reduce((a, i) => a + i.aeoScore, 0) / total) : 0;
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6">
-      <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#221536] via-[#181623] to-[#101112] p-6 md:p-8">
+    <div className="mx-auto w-full max-w-[1160px] space-y-5">
+      <Card className="border-white/15 bg-gradient-to-br from-[#1e1530] via-[#141922] to-[#0f1113] p-6 md:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-purple-300/80">History</p>
-            <h1 className="mt-1 text-2xl font-semibold text-white md:text-3xl">Scan timeline and trends</h1>
-            <p className="mt-2 text-sm text-neutral-300">Track score movement, visibility consistency, and report history.</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-purple-200/80">History</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">Every diagnostic, in one timeline</h1>
+            <p className="mt-2 text-sm text-neutral-300">Filter by time, scan quickly, and jump into full reports.</p>
           </div>
-          <Link href="/dashboard/run" className="rounded-xl bg-[#914bf1] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90">
-            Run Scan
+          <Link href="/dashboard/run" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:opacity-90">
+            New diagnostic
           </Link>
         </div>
-      </section>
+      </Card>
 
-      <section className="grid gap-4 rounded-2xl border border-white/10 bg-[#151719] p-4 md:grid-cols-[1fr_auto] md:items-center">
-        <input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by query or brand"
-          className="w-full rounded-xl border border-white/10 bg-[#101112] px-4 py-2.5 text-sm text-white outline-none transition focus:border-purple-400/60"
-        />
-
-        <div className="flex gap-2">
-          {FILTERS.map((value) => (
-            <button
-              key={value}
-              onClick={() => setFilter(value)}
-              className={`rounded-full border px-3 py-1.5 text-xs transition ${
-                filter === value
-                  ? "border-purple-300/50 bg-purple-400/20 text-purple-100"
-                  : "border-white/10 text-neutral-400 hover:bg-white/5"
-              }`}
-            >
-              {value}
-            </button>
-          ))}
+      <Card className="p-4">
+        <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search query or brand" />
+          <div className="flex gap-2">
+            {FILTERS.map((value) => (
+              <button
+                key={value}
+                onClick={() => setFilter(value)}
+                className={`rounded-full border px-3 py-1.5 text-xs transition ${
+                  filter === value
+                    ? "border-purple-300/50 bg-purple-400/20 text-purple-100"
+                    : "border-white/10 text-neutral-400 hover:bg-white/5"
+                }`}
+              >
+                {value}
+              </button>
+            ))}
+          </div>
         </div>
-      </section>
+      </Card>
 
       <section className="grid gap-4 sm:grid-cols-3">
-        <Stat label="Total Scans" value={String(total)} />
-        <Stat label="Average Score" value={String(avgScore)} />
-        <Stat label="Average Visibility" value={`${avgVisibility}/3`} />
+        <Stat label="Total diagnostics" value={`${total}`} />
+        <Stat label="Average score" value={`${avgScore}`} />
+        <Stat label="Visible mentions" value={`${(initialItems.reduce((a, i) => a + i.mentionCount, 0) / (total || 1)).toFixed(1)}/3`} />
       </section>
 
       {filtered.length === 0 ? (
-        <section className="rounded-2xl border border-white/10 bg-[#151719] p-10 text-center">
-          <p className="text-sm text-neutral-400">No matching scans found.</p>
-        </section>
+        <Card className="p-10 text-center">
+          <p className="text-sm text-neutral-400">No matching diagnostics found.</p>
+        </Card>
       ) : (
-        <section className="space-y-3">
+        <div className="space-y-2">
           {filtered.map((item) => (
             <Link
               key={item.id}
               href={`/report/${item.id}`}
-              className="block rounded-2xl border border-white/10 bg-[#151719] p-4 transition hover:border-purple-300/25 hover:bg-[#1a1d20]"
+              className="block rounded-2xl border border-white/10 bg-[var(--color-surface)] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20"
             >
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-white">{item.query}</p>
-                  <p className="mt-1 text-xs text-neutral-400">{item.brand} • {item.date}</p>
+                  <p className="mt-1 text-xs text-neutral-400">{item.brand} | {item.date}</p>
                 </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className={`font-semibold ${scoreColor(item.aeoScore)}`}>{item.aeoScore}</span>
-                  <span className="text-neutral-400">{item.visibility}</span>
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-white">{item.aeoScore}</p>
+                  <p className="text-xs text-neutral-400">{item.visibility}</p>
                 </div>
               </div>
             </Link>
           ))}
-        </section>
+        </div>
       )}
     </div>
   );
@@ -140,10 +122,9 @@ export function HistoryClient({ initialItems }: { initialItems: HistoryItem[] })
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-[#151719] p-4">
-      <p className="text-2xl font-semibold text-white">{value}</p>
-      <p className="mt-1 text-xs uppercase tracking-[0.12em] text-neutral-500">{label}</p>
-    </article>
+    <Card className="p-4">
+      <p className="text-xs uppercase tracking-[0.13em] text-neutral-500">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-white">{value}</p>
+    </Card>
   );
 }
-

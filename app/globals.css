@@ -6,6 +6,10 @@
   --purple: rgb(145, 75, 241);
   --gray: rgb(217, 217, 217);
   --dark-gray: rgb(39, 40, 41);
+  --color-surface: rgb(21, 23, 25);
+  --color-elevated: rgb(16, 17, 18);
+  --color-text-muted: rgb(163, 163, 163);
+  --color-accent: rgb(145, 75, 241);
   --font-outfit: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
 }
 

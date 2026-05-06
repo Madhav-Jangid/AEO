@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { HistoryClient, type HistoryItem } from "./HistoryClient";
 import type { Scan } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "History",
+};
 
 /* ─────────────────────────────────────────────── */
 /* 🧠 Data Transformer (IMPORTANT for scaling) */

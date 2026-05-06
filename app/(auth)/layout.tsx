@@ -1,5 +1,14 @@
 import Link from "next/link";
+import Image from "next/image";
+import type { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Account",
+    template: "%s | AEOlytics",
+  },
+};
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,13 +18,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Right Pane - Auth Form */}
       <div className="w-full flex items-center justify-center p-6 sm:p-12 relative">
-        <img
+        <Image
           src="https://framerusercontent.com/images/cLhE0zz9KoEfqjG2JcfNsvEDpA0.png"
           alt="AEOlytics preview"
-          className="absolute inset-0 w-[40%] object-contain mx-auto animate-rotate-slow"
-          style={{
-            filter: "blur(10px)",
-          }}
+          width={720}
+          height={720}
+          className="absolute inset-0 mx-auto w-[40%] h-auto object-contain animate-rotate-slow blur-[10px]"
+          priority
         />
 
         {/* Dark overlay for readability */}

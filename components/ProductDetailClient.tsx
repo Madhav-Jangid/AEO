@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { AnalysisResult, ProductDetailPayload } from "@/lib/types";
+
+type ProductDetailInitial = ProductDetailPayload & {
+  platform?: string;
+  lastAnalyzed?: string | null;
+  freeLimitReached?: boolean;
+};
 
 function scoreTone(score: number) {
   if (score < 30) return "text-red-600";
@@ -9,7 +16,7 @@ function scoreTone(score: number) {
   return "text-emerald-600";
 }
 
-export default function ProductDetailClient({ initial, productId }: { initial: ProductDetailPayload; productId: string }) {
+export default function ProductDetailClient({ initial, productId }: { initial: ProductDetailInitial; productId: string }) {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,10 +46,18 @@ export default function ProductDetailClient({ initial, productId }: { initial: P
     <main className="space-y-4">
       <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <img src={initial.product.image || "https://placehold.co/200x120?text=Product"} alt={initial.product.name} className="h-16 w-24 rounded-xl object-cover" />
+          <Image
+            src={initial.product.image || "https://placehold.co/200x120?text=Product"}
+            alt={initial.product.name}
+            width={96}
+            height={64}
+            className="h-16 w-24 rounded-xl object-cover"
+          />
           <div>
             <h1 className="text-lg font-semibold">{initial.product.name}</h1>
-            <p className="text-sm text-slate-600">{(initial as any).platform || "Unknown"} â€¢ Last analyzed: {(initial as any).lastAnalyzed ? new Date((initial as any).lastAnalyzed).toLocaleString() : "Never"}</p>
+            <p className="text-sm text-slate-600">
+              {initial.platform || "Unknown"} • Last analyzed: {initial.lastAnalyzed ? new Date(initial.lastAnalyzed).toLocaleString() : "Never"}
+            </p>
           </div>
         </div>
       </section>
@@ -50,11 +65,11 @@ export default function ProductDetailClient({ initial, productId }: { initial: P
       <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex gap-2">
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. best protein powder for beginners" className="flex-1 rounded-full border border-slate-300 px-4 py-2" />
-          <button disabled={loading || !query || (initial as any).freeLimitReached} onClick={runAnalysis} className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">
+          <button disabled={loading || !query || initial.freeLimitReached} onClick={runAnalysis} className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">
             {loading ? "Running..." : "Run Analysis"}
           </button>
         </div>
-        {(initial as any).freeLimitReached ? <p className="mt-2 text-sm text-amber-700">Free plan daily analysis limit reached. Upgrade to continue.</p> : null}
+        {initial.freeLimitReached ? <p className="mt-2 text-sm text-amber-700">Free plan daily analysis limit reached. Upgrade to continue.</p> : null}
       </section>
 
       {result ? (

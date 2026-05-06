@@ -1,6 +1,11 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { RunClient } from "./RunClient";
+
+export const metadata: Metadata = {
+  title: "Run Diagnostic",
+};
 
 export default async function RunDiagnosticPage() {
   const supabase = await createClient();
